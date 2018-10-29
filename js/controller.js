@@ -262,19 +262,29 @@ Vue.component('card', {
 	},
 	data: function(){
 		return {
-			
+			mainClass: "cardContainer",
+			viewClass: "textView"
 		};
 	},
 	computed: {
 		srcTitle: function(){
 			return "Источник: "+ this.source;
+		},
+		typeClass: function(){
+			let sClass = this.type.toLowerCase();
+			switch(sClass) {
+				case "skill proficiency": sClass = "skill"; break;
+				case "tool proficiency": sClass = "tool"; break;
+				case "world-specific": sClass = "world"; break;
+			}
+			return sClass;
 		}
 	},
 	methods: {
 		
 	},
 
-	template: `<div  class="cardContainer textView">
+	template: `<div :class="[mainClass, viewClass, typeClass]">
 	<div class='ItemCard'>
 		<div class="content">
 			<div class='header_info'>

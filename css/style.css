@@ -1294,47 +1294,47 @@ table td:first-child {
   color: #000;
   text-shadow: 0 0 2px #487EC5;
 }
-.common .ItemCard {
-  background-color: #607d8b;
-  border-color: #607d8b;
+.weapon .ItemCard {
+  background-color: #f06292;
+  border-color: #f06292;
 }
-.common.textView h1 {
-  color: #607d8b;
+.weapon.textView h1 {
+  color: #f06292;
 }
-.uncommon .ItemCard {
+.armor .ItemCard {
   background-color: #8bc34a;
   border-color: #8bc34a;
 }
-.uncommon.textView h1 {
+.armor.textView h1 {
   color: #8bc34a;
 }
-.rare .ItemCard {
-  background-color: #03a9f4;
-  border-color: #03a9f4;
+.regular .ItemCard {
+  background-color: #ffb74d;
+  border-color: #ffb74d;
 }
-.rare.textView h1 {
-  color: #03a9f4;
+.regular.textView h1 {
+  color: #ffb74d;
 }
-.very_rare .ItemCard {
-  background-color: #9c27b0;
-  border-color: #9c27b0;
+.skill .ItemCard {
+  background-color: #81C784;
+  border-color: #81C784;
 }
-.very_rare.textView h1 {
-  color: #9c27b0;
+.skill.textView h1 {
+  color: #81C784;
 }
-.legendary .ItemCard {
-  background-color: #ffc107;
-  border-color: #ffc107;
+.tool .ItemCard {
+  background-color: #A1887F;
+  border-color: #A1887F;
 }
-.legendary.textView h1 {
-  color: #ffc107;
+.tool.textView h1 {
+  color: #A1887F;
 }
-.artifact .ItemCard {
-  background-color: #795548;
-  border-color: #795548;
+.world .ItemCard {
+  background-color: #ba68c8;
+  border-color: #ba68c8;
 }
-.artifact.textView h1 {
-  color: #795548;
+.world.textView h1 {
+  color: #ba68c8;
 }
 .p_side {
   background: rgba(0, 0, 0, 0.4);
