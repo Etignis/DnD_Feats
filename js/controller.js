@@ -509,30 +509,34 @@ Vue.component('card', {
 		},
 		mounted: function() {
 			this.hideInfo();
+			this.getHash();
 		},
 		methods: {
 			onSourceChange: function(sKey){
 				this.aSources[sKey].checked = !this.aSources[sKey].checked; 
+				updateHash();
 			},
 			onTypeChange: function(sKey){
 				this.aTypes[sKey].checked = !this.aTypes[sKey].checked; 
+				updateHash();
 			},
 			onLanguageChange: function(sKey){
 				this.sLang = sKey;
-				
+				updateHash();
 			},
 			onSearchName: function(sValue){
 				this.sSearch = sValue;
+				updateHash();
 			},
 			getRandomItem: function(){
 				this.sSearch = "";
 				this.sSearch = this.aItemsList[randd(0, this.aItemsList.length-1)].name;
+				updateHash();
 			},
 			
 			hideInfo(){
 				$("#info_text").hide();
 			},
-			
 			
 			lockCard: function(oCard){
 				if(this.aSelectedItems.length>0) {
@@ -606,6 +610,54 @@ Vue.component('card', {
 				} else {
 					this.aSelectedItems = this.aItemsList.map(item => item.id);
 				}				
+			},
+			
+			
+			updateHash: function() {
+				var aHash = [];
+				if(this.aSrcSelected.length != aSrcList.length) {
+					aHash.push("src="+this.aSrcSelected.join(","));
+				}
+				if(this.aTypeSelected.length != aTypeList.length) {
+					aHash.push("type="+this.aTypeSelected.join(","));
+				}
+				if(this.sLang != "ru") {
+					aHash.push("lang="+this.sLang);
+				}
+				
+				if(sHash.length>0) {
+					window.location.hash = aHash.join("&");
+				} else {
+					this.removeHash();
+				}
+			},
+			removeHash: function(){
+				history.pushState("", document.title, window.location.pathname + window.location.search);
+				return false;
+			},
+			getHash(){
+				var sHash = window.location.hash.slice(1); // /archive#q=Item_name
+				sHash = decodeURIComponent(sHash);
+				var oHash = {};
+				sHash.split("&").forEach(function(sPair){
+					aPair = sPair.split("=");
+					oHash[aPair[0]] = aPair[1].split(",")
+				}.bind(this));
+				
+				if(oHash.src) {
+					oHash.src.forEach(function(sSrc){
+						this.aSources[sSrc].checked = true;
+					});
+				}
+				if(oHash.type) {
+					oHash.type.forEach(function(sType){
+						this.aTypes[sType].checked = true;
+					});
+				}
+				if(oHash.lang) {
+					this.sLang = oHash.lang
+				}
+				
 			}
 		}
   });
