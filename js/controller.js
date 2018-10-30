@@ -332,6 +332,9 @@ Vue.component('card', {
 		selectedClass: function(){
 			return this.selected? "selected" : "";
 		},
+		ItemCard: function(){
+			return "ItemCard";
+		},
 		prerequisite: function(){
 			return this.pre.length>0? "<span title='Требования необходимые для возможности получения черты'>("+this.pre+")</span>": "";
 		}
@@ -345,15 +348,18 @@ Vue.component('card', {
 		},
 		hide: function(oEvent){
 			this.$emit('hide', oEvent);
+		},
+		select: function(oEvent){
+			this.$emit('select', oEvent);
 		}
 	},
 
-	template: `<div :class="[mainClass, viewClass, typeClass, selectedClass]">
-	<div class='ItemCard'>
+	template: `<div :class="[mainClass, viewClass, typeClass]" @click.ctrl="select">
+	<div :class='[ItemCard, selectedClass]'>
 		<div class="content">
-			<span v-show="locked" class="bUnlockItem" title="Открепить обратно" @click="unlock"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
-			<span v-show="!locked" class="bLockItem" title="Закорепить черту (не будут действовать фильтры)" @click="lock"><i class="fa fa-lock" aria-hidden="true"></i></span>
-			<span class="bHideItem" title="Скрыть черту (будет внизу панели фильтров)" @click="hide"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+			<span v-show="locked" class="bUnlockItem" title="Открепить обратно" @click.stop="unlock"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
+			<span v-show="!locked" class="bLockItem" title="Закорепить черту (не будут действовать фильтры)" @click.stop="lock"><i class="fa fa-lock" aria-hidden="true"></i></span>
+			<span class="bHideItem" title="Скрыть черту (будет внизу панели фильтров)" @click.stop="hide"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
 			<div class='header_info'>
 				<h1 :title="tooltip">{{name}}</h1>
 				<div>{{type}}</div>
@@ -377,7 +383,8 @@ Vue.component('card', {
 			sSearch: "",
 			aHiddenItems: [],
 			aLockedItems: [],
-			aSelectedItems: []
+			aSelectedItems: [],
+			aSelectedLockedItems: []
     },
 
 		computed: {
@@ -491,7 +498,8 @@ Vue.component('card', {
 						"source": this.aSources[oItem.en.source].text[this.sLang].title,
 						"type": this.aTypes[oItem.en.type].text[this.sLang].title,
 						"color": oItem.en.type,
-						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1
+						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1,
+						"selected": this.aSelectedLockedItems.indexOf(oItem.en.name)>-1
 					};
 					if(oItem[this.sLang].pre || oItem.en.pre) {
 						o.pre = oItem[this.sLang].pre || oItem.en.pre;
@@ -549,10 +557,11 @@ Vue.component('card', {
 			lockCard: function(oCard){
 				if(this.aSelectedItems.length>0) {
 					this.aSelectedItems.forEach(function(sId){
-						if(this.aSelectedItems.indexOf(sId)<0) {
+						if(this.aSelectedItems.indexOf(sId)>-1) {
 							this.aLockedItems.push(sId);
 						}
 					}.bind(this));
+					this.selectAll(false);
 				} else {
 					let id = oCard.id;
 					if(this.aLockedItems.indexOf(id)<0) {
@@ -579,10 +588,11 @@ Vue.component('card', {
 			hideCard: function(oCard){
 				if(this.aSelectedItems.length>0) {
 					this.aSelectedItems.forEach(function(sId){
-						if(this.aSelectedItems.indexOf(sId)<0) {
+						if(this.aSelectedItems.indexOf(sId)>-1) {
 							this.aHiddenItems.push(sId);
 						}
 					}.bind(this));
+					this.selectAll(false);
 				} else {
 					let id = oCard.id;
 					if(this.aHiddenItems.indexOf(id)<0) {
@@ -606,15 +616,25 @@ Vue.component('card', {
 			selectCard: function(oCard){
 				let id = oCard.id;
 				let nInd = this.aSelectedItems.indexOf(id);
-				if(nInd>1) {
+				if(nInd>-1) {
 					this.aSelectedItems.splice(nInd, 1);
 				} else {
 						this.aSelectedItems.push(id);
 				}
 			},
-			selectAll: function(){
-				if(this.aSelectedItems.length>0) {
+			selectLockedCard: function(oCard){
+				let id = oCard.id;
+				let nInd = this.aSelectedLockedItems.indexOf(id);
+				if(nInd>-1) {
+					this.aSelectedLockedItems.splice(nInd, 1);
+				} else {
+					this.aSelectedLockedItems.push(id);
+				}
+			},
+			selectAll: function(bStat){
+				if(this.aSelectedItems.length>0 || bStat===false) {
 					this.aSelectedItems = [];
+					this.aSelectedLockedItems = [];
 				} else {
 					this.aSelectedItems = this.aItemsList.map(item => item.id);
 				}				

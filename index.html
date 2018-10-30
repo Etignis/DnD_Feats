@@ -97,8 +97,10 @@
 				:type="item.type"
 				:color="item.color"
 				:pre="item.pre"
+				:selected="item.selected"
 				:locked="item.locked"
 				@unlock="unlockCard(item)"
+				@select="selectLockedCard(item)"
 			>
 			</card>
 		</div><span class='bottomHeader'></span></div>
@@ -118,7 +120,7 @@
 			:pre="item.pre"
 			@lock="lockCard(item)"
 			@hide="hideCard(item)"
-			@click.ctrl="selectCard(item)"
+			@select="selectCard(item)"
 		>
 		</card>
 		
