@@ -289,6 +289,10 @@ Vue.component('card', {
 			type: String,
 			default: ""
 		},
+		selected: {
+			type: Boolean,
+			default: falsse
+		},
 		locked: {
 			type: Boolean,
 			default: false
@@ -320,6 +324,9 @@ Vue.component('card', {
 				case "world-specific": sClass = "world"; break;
 			}
 			return sClass;
+		},
+		selectedClass: function(){
+			return this.selected: "selected" : "";
 		}
 	},
 	methods: {
@@ -334,7 +341,7 @@ Vue.component('card', {
 		}
 	},
 
-	template: `<div :class="[mainClass, viewClass, typeClass]">
+	template: `<div :class="[mainClass, viewClass, typeClass, selectedClass]">
 	<div class='ItemCard'>
 		<div class="content">
 			<span v-show="locked" class="bUnlockItem" title="Открепить обратно" @click="unlock"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
@@ -364,6 +371,7 @@ Vue.component('card', {
 			sSearch: "",
 			aHiddenItems: [],
 			aLockedItems: [],
+			aSelectedItems: []
     },
 
 		computed: {
@@ -452,7 +460,8 @@ Vue.component('card', {
 						"source": this.aSources[oItem.en.source].text[this.sLang].title,
 						"type": this.aTypes[oItem.en.type].text[this.sLang].title,
 						"color": oItem.en.type,
-						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1
+						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1,
+						"selected": this.aSelectedItems.indexOf(oItem.en.name)>-1
 					};
 					if(oItem[this.sLang].pre || oItem.en.pre) {
 						o.pre = oItem[this.sLang].pre || oItem.en.pre;
@@ -526,22 +535,47 @@ Vue.component('card', {
 			
 			
 			lockCard: function(oCard){
-				let id = oCard.id;
-				if(this.aLockedItems.indexOf(id)<0) {
-					this.aLockedItems.push(id);
+				if(this.aSelectedItems.length>0) {
+					this.aSelectedItems.forEach(function(sId){
+						if(this.aSelectedItems.indexOf(sId)<0) {
+							this.aLockedItems.push(sId);
+						}
+					}.bind(this));
+				} else {
+					let id = oCard.id;
+					if(this.aLockedItems.indexOf(id)<0) {
+						this.aLockedItems.push(id);
+					}
 				}
 			},
 			unlockCard: function(oCard){
-				let id = oCard.id;
-				let nInd = this.aLockedItems.indexOf(id);
-				if(nInd>1) {
-					this.aLockedItems.splice(nInd, 1);
+				if(this.aSelectedItems.length>0) {
+					this.aSelectedItems.forEach(function(sId){
+						let nInd = this.aLockedItems.indexOf(sId);
+						if(nInd>1) {
+							this.aLockedItems.splice(nInd, 1);
+						}
+					}.bind(this));
+				} else {
+					let id = oCard.id;
+					let nInd = this.aLockedItems.indexOf(id);
+					if(nInd>1) {
+						this.aLockedItems.splice(nInd, 1);
+					}
 				}
 			},
 			hideCard: function(oCard){
-				let id = oCard.id;
-				if(this.aHiddenItems.indexOf(id)<0) {
-					this.aHiddenItems.push(id);
+				if(this.aSelectedItems.length>0) {
+					this.aSelectedItems.forEach(function(sId){
+						if(this.aSelectedItems.indexOf(sId)<0) {
+							this.aHiddenItems.push(sId);
+						}
+					}.bind(this));
+				} else {
+					let id = oCard.id;
+					if(this.aHiddenItems.indexOf(id)<0) {
+						this.aHiddenItems.push(id);
+					}
 				}
 			},
 			unhideCard: function(sId){
@@ -555,6 +589,19 @@ Vue.component('card', {
 			},
 			unhideAll: function(){
 				aHiddenItems = [];
+			},
+			
+			selectCard: function(oCard){
+				let id = oCard.id;
+				let nInd = this.aSelectedItems.indexOf(id);
+				if(nInd>1) {
+					this.aSelectedItems.splice(nInd, 1);
+				} else {
+						this.aSelectedItems.push(id);
+				}
+			},
+			deselectall: function(oCard){
+				this.aSelectedItems = [];
 			}
 		}
   });

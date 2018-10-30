@@ -111,9 +111,11 @@
 			:source="item.source"
 			:type="item.type"
 			:color="item.color"
+			:selected="item.selected"
 			:pre="item.pre"
 			@lock="lockCard(item)"
 			@hide="hideCard(item)"
+			@click.ctrl="selectCard(item)"
 		>
 		</card>
 		
