@@ -600,8 +600,12 @@ Vue.component('card', {
 						this.aSelectedItems.push(id);
 				}
 			},
-			deselectall: function(oCard){
-				this.aSelectedItems = [];
+			selectAll: function(){
+				if(this.aSelectedItems.length>0) {
+					this.aSelectedItems = [];
+				} else {
+					this.aSelectedItems = this.aItemsList.map(item => item.id);
+				}				
 			}
 		}
   });
