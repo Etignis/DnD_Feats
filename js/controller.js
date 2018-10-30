@@ -49,6 +49,36 @@ Vue.component('searchfield', {
 </div>`
 });
 
+Vue.component('hiddenitem', {
+	props: {
+		id: {
+			type: String,
+			default: ""
+		},
+		title: {
+			type: String,
+			default: ""
+		},
+		tooltip: {
+			type: String,
+			default: ""
+		}
+	},
+	data: function(){
+		return {};
+	},
+	methods: {
+		unhide: function(oEvent){
+			this.$emit('unhide', oEvent);
+		}
+	},
+	computed: {
+	
+	},
+
+	template: `<a href='#' :title='tooltip' @click.stop="unhide">{{title}}</a>`
+});
+
 
 Vue.component('comboboxItem', {
 	props: {
@@ -239,6 +269,10 @@ Vue.component('card', {
 			type: String,
 			default: ""
 		},
+		id: {
+			type: String,
+			default: ""
+		},
 		text: {
 			type: String,
 			default: ""
@@ -250,6 +284,14 @@ Vue.component('card', {
 		source: {
 			type: String,
 			default: ""
+		},
+		color: {
+			type: String,
+			default: ""
+		},
+		locked: {
+			type: Boolean,
+			default: false
 		},
 		type: {
 			type: String,
@@ -271,7 +313,7 @@ Vue.component('card', {
 			return "Источник: "+ this.source;
 		},
 		typeClass: function(){
-			let sClass = this.type.toLowerCase();
+			let sClass = this.color.toLowerCase();
 			switch(sClass) {
 				case "skill proficiency": sClass = "skill"; break;
 				case "tool proficiency": sClass = "tool"; break;
@@ -281,12 +323,23 @@ Vue.component('card', {
 		}
 	},
 	methods: {
-		
+		lock: function(oEvent){
+			this.$emit('lock', oEvent);
+		},
+		unlock: function(oEvent){
+			this.$emit('unlock', oEvent);
+		},
+		hide: function(oEvent){
+			this.$emit('hide', oEvent);
+		}
 	},
 
 	template: `<div :class="[mainClass, viewClass, typeClass]">
 	<div class='ItemCard'>
 		<div class="content">
+			<span v-show="locked" class="bUnlockItem" title="Открепить обратно" @click="unlock"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
+			<span v-show="!locked" class="bLockItem" title="Закорепить черту (не будут действовать фильтры)" @click="lock"><i class="fa fa-lock" aria-hidden="true"></i></span>
+			<span class="bHideItem" title="Скрыть черту (будет внизу панели фильтров)" @click="hide"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
 			<div class='header_info'>
 				<h1>{{name}}</h1>
 				<div>{{type}}</div>
@@ -308,10 +361,15 @@ Vue.component('card', {
 			aLanguages: oLanguages,
 			aItems: allItems,
 			sLang: "ru",
-			sSearch: ""
+			sSearch: "",
+			aHiddenItems: [],
+			aLockedItems: [],
     },
 
 		computed: {
+			sOtherLang: function(){
+				return (this.sLang=="ru")? "en": "ru";
+			},
 			aSrcList: function(){
 				let a=[];
 				for (var key in this.aSources){
@@ -325,10 +383,12 @@ Vue.component('card', {
 				}
 				return a;
 			},
+			
 			aSrcSelected: function(){
 				let aFiltered = this.aSrcList.filter(item => item.checked);
 				return (aFiltered.length>0)? aFiltered.map(item => item.key) : this.aSrcList.map(item => item.key);
 			},
+			
 			aTypeList: function(){
 				let a=[];
 				for (var key in this.aTypes){
@@ -342,10 +402,12 @@ Vue.component('card', {
 				}
 				return a;
 			},
+			
 			aTypeSelected: function(){
 				let aFiltered = this.aTypeList.filter(item => item.checked);
 				return (aFiltered.length>0)? aFiltered.map(item => item.key) : this.aTypeList.map(item => item.key);
 			},
+			
 			aLanguageList: function(){
 				let a=[];
 				for (var key in this.aLanguages){
@@ -358,6 +420,7 @@ Vue.component('card', {
 				}
 				return a;
 			},
+			
 			sLangSelected: function(){
 				return this.aLanguages[this.sLang].text[this.sLang].title;
 			},
@@ -365,6 +428,8 @@ Vue.component('card', {
 			sNameInput: function(){
 				return this.sSearch.toLowerCase();
 			},
+			
+			
 			
 			aItemsList: function(){
 				let aFiltered = this.aItems.filter(function(oItem){
@@ -375,22 +440,63 @@ Vue.component('card', {
 							oItem.en.name.toLowerCase().indexOf(this.sNameInput)>-1 || 
 							oItem.ru.name.toLowerCase().indexOf(this.sNameInput)>-1
 							)
-						) 
+						) &&
+						this.aHiddenItems.indexOf(oItem.en.name)<0
 				}.bind(this));
 				return aFiltered.map(function(oItem){
 					let o={
+						"id": oItem.en.name,
 						"name": oItem[this.sLang].name || oItem.en.name,
 						"text": oItem[this.sLang].text || oItem.en.text,
 						"src": oItem[this.sLang].source || oItem.en.source,
 						"source": this.aSources[oItem.en.source].text[this.sLang].title,
-						"type": this.aTypes[oItem.en.type].text[this.sLang].title
+						"type": this.aTypes[oItem.en.type].text[this.sLang].title,
+						"color": oItem.en.type,
+						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1
 					};
 					if(oItem[this.sLang].pre || oItem.en.pre) {
 						o.pre = oItem[this.sLang].pre || oItem.en.pre;
 					}
 					return o;
 				}.bind(this));
-			}
+			},
+			
+			aLockedItemsList: function(){
+				let aFiltered = this.aItems.filter(function(oItem){
+					return 	this.aLockedItems.indexOf(oItem.en.name)>-1
+				}.bind(this));
+				return aFiltered.map(function(oItem){
+					let o={
+						"id": oItem.en.name,
+						"name": oItem[this.sLang].name || oItem.en.name,
+						"text": oItem[this.sLang].text || oItem.en.text,
+						"src": oItem[this.sLang].source || oItem.en.source,
+						"source": this.aSources[oItem.en.source].text[this.sLang].title,
+						"type": this.aTypes[oItem.en.type].text[this.sLang].title,
+						"color": oItem.en.type,
+						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1
+					};
+					if(oItem[this.sLang].pre || oItem.en.pre) {
+						o.pre = oItem[this.sLang].pre || oItem.en.pre;
+					}
+					return o;
+				}.bind(this));
+			},
+			
+			aHiddenItemsList: function(){
+				let aFiltered = this.aItems.filter(function(oItem){
+					return 	this.aHiddenItems.indexOf(oItem.en.name)>-1
+				}.bind(this)); 
+				return aFiltered.map(function(oItem){
+					let o={
+						"id": oItem.en.name,
+						"title": oItem[this.sLang].name || oItem.en.name,
+						"tooltip": oItem[this.sOtherLang].name || oItem.en.name						
+					};
+					return o;
+				}.bind(this));
+			},
+			
 		},
 		mounted: function() {
 			this.hideInfo();
@@ -398,21 +504,15 @@ Vue.component('card', {
 		methods: {
 			onSourceChange: function(sKey){
 				this.aSources[sKey].checked = !this.aSources[sKey].checked; 
-				//this.filterCards();
 			},
 			onTypeChange: function(sKey){
 				this.aTypes[sKey].checked = !this.aTypes[sKey].checked; 
-				//this.filterCards();
 			},
 			onLanguageChange: function(sKey){
-				//this.aTypes[sKey].checked = !this.aTypes[sKey].checked; 
-				//this.filterCards();
 				this.sLang = sKey;
 				
 			},
 			onSearchName: function(sValue){
-				//this.aTypes[sKey].checked = !this.aTypes[sKey].checked; 
-				//this.filterCards();
 				this.sSearch = sValue;
 			},
 			getRandomItem: function(){
@@ -422,6 +522,39 @@ Vue.component('card', {
 			
 			hideInfo(){
 				$("#info_text").hide();
+			},
+			
+			
+			lockCard: function(oCard){
+				let id = oCard.id;
+				if(this.aLockedItems.indexOf(id)<0) {
+					this.aLockedItems.push(id);
+				}
+			},
+			unlockCard: function(oCard){
+				let id = oCard.id;
+				let nInd = this.aLockedItems.indexOf(id);
+				if(nInd>1) {
+					this.aLockedItems.splice(nInd, 1);
+				}
+			},
+			hideCard: function(oCard){
+				let id = oCard.id;
+				if(this.aHiddenItems.indexOf(id)<0) {
+					this.aHiddenItems.push(id);
+				}
+			},
+			unhideCard: function(sId){
+				let nInd = this.aHiddenItems.indexOf(sId);
+				if(nInd>-1) {
+					this.aHiddenItems.splice(nInd, 1);
+				}
+			},
+			unlockAll: function(){
+				aLockedItems = [];
+			},
+			unhideAll: function(){
+				aHiddenItems = [];
 			}
 		}
   });
