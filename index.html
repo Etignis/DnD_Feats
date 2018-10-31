@@ -60,26 +60,39 @@
 		</div>
 		<div class='mediaWidth'>
 			<custom-select
+				id="SortSelect"
+				title="Сортировка"
+				:selected="sSortSelected"
+				:items="aSortList"
+				@iclick="onSortChange($event)"
+			>
+			</custom-select>
+		</div>
+		<div class='mediaWidth'>
+			<custom-select
 				id="LangSelect"
 				title="Язык"
 				:selected="sLangSelected"
 				:items="aLanguageList"
 				@iclick="onLanguageChange($event)"
 			>
-		</custom-select>
+			</custom-select>
 		</div>
 		<div class='mediaWidth' v-show="aHiddenItemsList.length>0">
-			<a href='#' class='bReturnUnvisible' @click.stop="unhideAll">Вернуть все обратно</a>
-			<hiddenitem 
-				v-for="item in aHiddenItemsList"
-				:key="item.id"
-				:id="item.id"
-				:title="item.title"
-				:tooltip="item.tooltip"
-				@unhide="unhideCard(item.id)"
-			>
-			</hiddenitem>
-		</custom-select>
+			<label class="filterLabel">Скрытые черты ({{aHiddenItemsList.length}})</label>
+			<div id="HiddenItems">
+				<a href='#' class='bReturnUnvisible' @click.stop="unhideAll">Вернуть все обратно</a>
+				<hiddenitem 
+					v-for="item in aHiddenItemsList"
+					:key="item.id"
+					:id="item.id"
+					:title="item.title"
+					:tooltip="item.tooltip"
+					@unhide="unhideCard(item.id)"
+				>
+				</hiddenitem>
+			</custom-select>
+			</div>
 		</div>
 	</div>
 	<div class='p_cont'>
@@ -110,11 +123,12 @@
 				</card>
 			</div>
 			<div class='flex_row noprint'>
-				<span class='bottomHeader'>Каталог черт</span>
+				<span class='bottomHeader'>Каталог черт ({{aItemsList.length}})</span>
 			</div>
 		</div>
 	
-		<div class="row featContainer noprint" :data-itemcount="aItemsList.length">
+		<div class="row featContainer" :class="{noprint: aLockedItemsList.length>0}" :data-itemcount="aItemsList.length">
+			<span class='itemCounter noprint' v-show="aLockedItemsList.length<1">{{aItemsList.length}}</span>
 			<card
 				v-for="item in aItemsList"
 				:key="item.name"

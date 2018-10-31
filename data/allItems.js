@@ -221,6 +221,31 @@ var oLanguages = {
 		"visible": true
 	}
 }
+var oSort = {
+	"typeAlpha": {
+		"text": {
+			"en": {
+				"title": "By type & alphabet"
+			},
+			"ru": {
+				"title": "По типу и алфавиту"
+			}
+		},
+		"checked": true,
+		"visible": true
+	},
+	"alpha": {
+		"text": {
+			"en": {
+				"title": "By alphabet"
+			},
+			"ru": {
+				"title": "По алфавиту"
+			}
+		},
+		"visible": true
+	}
+}
 
 var allItems = [
 	{
@@ -724,7 +749,7 @@ var allItems = [
 			"name": "Weapon Master",
 			"text": "<p>You have practiced extensively with a variety of weapons, gaining the following benefits:</p><ul><li> Increase your Strength or Dexterity score by 1, to a maximum of 20.</li><li> You gain proficiency with four simple or martial weapons of your choice.</li></ul>",
 			"source": "PHB",
-			"type": "Armor"
+			"type": "Weapon"
 		},
 		"ru": {
 			"name": "Мастер оружия",
@@ -790,7 +815,7 @@ var allItems = [
 			"name": "Heavy Armor Master",
 			"text": "<p>You can use your armor to deflect strikes that would kill others. You gain the following benefits:</p><ul><li>Increase your Strength score by 1, to a maximum of 20.</li><li>While you are wearing heavy armor, bludgeoning, piercing, and slashing damage that you take from non-magical weapons is reduced by 3.</li></ul>",
 			"source": "PHB",
-			"type": "Skill Proficiency",
+			"type": "Armor",
 			"pre": "Proficiency with heavy armor"
 		},
 		"ru": {
@@ -1008,7 +1033,7 @@ var allItems = [
 			"name": "Theologian",
 			"text": "<p>Your extensive study of religion rewards you with the following benefits:</p><ul><li>Increase your Intelligence score by 1, to a maximum of 20.</li><li>You gain proficiency in the Religion skill. If you are already proficient in the skill, you add double your proficiency bonus to checks you make with it.</li><li>You learn the Thaumaturgy cantrip and Detect Evil and Good spells. You can cast Detect Evil and Good once without expending a spell slot, and you regain the ability to do so when you finish a long rest.</li></ul>",
 			"source": "UA",
-			"type": "Tool Proficiency"
+			"type": "Skill Proficiency"
 		},
 		"ru": {
 			"name": "",
@@ -1056,7 +1081,7 @@ var allItems = [
 			"name": "Master of Disguise",
 			"text": "<p>You have honed your ability to shape your personality and to read the personalities of others. You gain the following benefits:</p><ul><li>Increase your Charisma score by 1, to a maximum of 20.</li><li>You gain proficiency with the disguise kit. If you are already proficient with it, you add double your proficiency bonus to checks you make with it.</li><li>If you spend 1 hour observing a creature, you can then spend 8 hours crafting a disguise you can quickly don to mimic that creature. Making the disguise requires a disguise kit. You must make checks as normal to disguise yourself, but you can assume the disguise as an action.</li></ul>",
 			"source": "UA",
-			"type": "Racial"
+			"type": "Tool Proficiency"
 		},
 		"ru": {
 			"name": "",

@@ -76,7 +76,7 @@ Vue.component('hiddenitem', {
 	
 	},
 
-	template: `<a href='#' :title='tooltip' @click.stop="unhide">{{title}}</a>`
+	template: `<a href='#' @click.stop="unhide">{{title}} ({{tooltip}})</a>`
 });
 
 
@@ -363,7 +363,7 @@ Vue.component('card', {
 			<div class='header_info'>
 				<h1 :title="tooltip">{{name}}</h1>
 				<div>{{type}}</div>
-				<div v-html="prerequisite"></div>
+				<div class='prerequisite' v-html="prerequisite"></div>
 			</div>
 			<div v-html="text" class='info'></div>
 			<div class='source' :title="srcTitle">{{src}}</div>
@@ -378,8 +378,10 @@ Vue.component('card', {
 			aSources: oSources,
 			aTypes: oTypes,
 			aLanguages: oLanguages,
+			aSort: oSort,
 			aItems: allItems,
 			sLang: "ru",
+			sSort: "typeAlpha",
 			sSearch: "",
 			aHiddenItems: [],
 			aLockedItems: [],
@@ -412,8 +414,10 @@ Vue.component('card', {
 			
 			aTypeList: function(){
 				let a=[];
+				let i=0;
 				for (var key in this.aTypes){
 					if(this.aTypes[key].visible !== false){
+						this.aTypes[key].i = i++;
 						a.push({
 							key: key,
 							title: this.aTypes[key].text.en.title + "<br>" + this.aTypes[key].text.ru.title,
@@ -446,6 +450,24 @@ Vue.component('card', {
 				return this.aLanguages[this.sLang].text[this.sLang].title;
 			},
 			
+			aSortList: function(){
+				let a=[];
+				for (var key in this.aSort){
+					if(this.aSort[key].visible !== false){
+						a.push({
+							key: key,
+							title: this.aSort[key].text[this.sLang].title
+						});
+					}
+				}
+				return a;
+			},
+			
+			sSortSelected: function(){
+				return this.aSort[this.sSort].text[this.sLang].title;
+			},
+			
+			
 			sNameInput: function(){
 				return this.sSearch.toLowerCase();
 			},
@@ -464,6 +486,7 @@ Vue.component('card', {
 						) &&
 						this.aHiddenItems.indexOf(oItem.en.name)<0
 				}.bind(this));
+				
 				return aFiltered.map(function(oItem){
 					let o={
 						"id": oItem.en.name,
@@ -473,6 +496,7 @@ Vue.component('card', {
 						"src": oItem[this.sLang].source || oItem.en.source,
 						"source": this.aSources[oItem.en.source].text[this.sLang].title,
 						"type": this.aTypes[oItem.en.type].text[this.sLang].title,
+						"typeNum": this.aTypes[oItem.en.type].i,
 						"color": oItem.en.type,
 						"locked": this.aLockedItems.indexOf(oItem.en.name)>-1,
 						"selected": this.aSelectedItems.indexOf(oItem.en.name)>-1
@@ -481,6 +505,20 @@ Vue.component('card', {
 						o.pre = oItem[this.sLang].pre || oItem.en.pre;
 					}
 					return o;
+				}.bind(this)).sort(function(a, b){
+					if(this.sSort == "alpha") {
+						if (a.name.toLowerCase().trim() < b.name.toLowerCase().trim())
+							return -1;
+						if (a.name.toLowerCase().trim() > b.name.toLowerCase().trim())
+							return 1;						
+						return 0
+					} else {
+						if (a.typeNum+a.name.toLowerCase().trim() < b.typeNum+b.name.toLowerCase().trim() )
+							return -1;
+						if (a.typeNum+a.name.toLowerCase().trim() > b.typeNum+b.name.toLowerCase().trim() )
+							return 1;
+						return 0
+					}
 				}.bind(this));
 			},
 			
@@ -538,6 +576,10 @@ Vue.component('card', {
 			},
 			onLanguageChange: function(sKey){
 				this.sLang = sKey;
+				this.updateHash();
+			},
+			onSortChange: function(sKey){
+				this.sSort = sKey;
 				this.updateHash();
 			},
 			onSearchName: function(sValue){
@@ -656,6 +698,9 @@ Vue.component('card', {
 				if(this.sLang != "ru") {
 					aHash.push("lang="+this.sLang);
 				}
+				if(this.sSort != "typeAlpha") {
+					aHash.push("sort="+this.sSort);
+				}
 				
 				if(aHash.length>0) {
 					window.location.hash = aHash.join("&").replace(/\s+/g, "_");
@@ -698,6 +743,9 @@ Vue.component('card', {
 				}
 				if(oHash.lang) {
 					this.sLang = oHash.lang
+				}
+				if(oHash.sort) {
+					this.sSort = oHash.sort
 				}
 				if(oHash.q) {
 					this.sSearch = oHash.q[0];

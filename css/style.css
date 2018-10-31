@@ -889,11 +889,10 @@ table td:first-child {
 .featContainer {
   position: relative;
 }
-.featContainer:before {
-  content: attr(data-itemcount);
+.featContainer .itemCounter {
   position: absolute;
   padding: .1em;
-  top: -1.4rem;
+  top: 1rem;
   right: 1.9em;
   font-weight: bold;
   background: rgba(255, 255, 255, 0.3);
@@ -1019,6 +1018,10 @@ table td:first-child {
   margin-right: 1.4rem;
   text-align: left;
 }
+.cardContainer.textView .ItemCard .header_info .prerequisite {
+  margin-left: 1em;
+  font-style: italic;
+}
 .cardContainer.textView .ItemCard .info {
   display: block;
   margin-top: 0;
@@ -1055,7 +1058,8 @@ table td:first-child {
   color: #666666;
 }
 .ItemCard.selected {
-  transform: scale(0.94);
+  transform: scale(1.02);
+  /* scale(0.94);*/
   outline: 5px rgba(250, 250, 250, 0.8) solid;
   transition: outline .2s;
 }
@@ -1505,6 +1509,8 @@ table td:first-child {
   text-decoration: none;
   color: #ddd;
   transition: color .3s;
+  display: inline-block;
+  margin: 0.1em;
 }
 #HiddenItems a:hover {
   color: #6aa0e7;
