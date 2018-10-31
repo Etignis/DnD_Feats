@@ -1043,6 +1043,9 @@ table td:first-child {
   margin-right: 0.5rem;
   margin-left: 0.1rem;
 }
+.cardContainer.textView .ItemCard .header_info h1 {
+  padding-top: 0.1em;
+}
 .cardContainer.textView .ItemCard .header_info .subtitle {
   margin-left: 1.4rem;
   margin-right: 1.4rem;
@@ -1072,10 +1075,6 @@ table td:first-child {
   display: inline;
   float: right;
   max-height: 19rem;
-}
-.cardContainer.textView .ItemCard .coast {
-  position: relative;
-  text-align: left;
 }
 .cardContainer.textView .ItemCard .bottom_info {
   bottom: 1em;
