@@ -88,16 +88,19 @@
     right: 0;
     left: 0;
     bottom: 0;
-    overflow-y: scroll;
+    overflow-y: hidden;
     z-index: 999;
 
     .mod_win{
         .fr-concave;
-        display: block;
+				padding: 0.3em;
+        display: flex;
         position: absolute;
         width: 95%;
         max-width: 50em;
         min-height: 15em;
+				max-height: 95%;
+				overflow-y: hidden;
         top: 1em;
         //margin: 0 auto;
         z-index: 9999;
@@ -105,12 +108,19 @@
         color: @d-gray;
         cursor: default;
         font-weight: normal;
+				position: relative;
 				 .outLinks();
     }
+		.mod_win_content{
+			
+			padding: .5em;
+			overflow-y: scroll;
+			.scrollbars(.2em, @m-gray, @l-gray)
+		}
     .bCloseInfoWin{
         position: absolute;
         top: -.2em;
-        right: 0;
+        right: .4em;
         padding: .1em .2em;
         font-size: 300%;
         cursor: pointer;
@@ -148,6 +158,12 @@
 }
 #infoWin{
    
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+  opacity: 0;
 }
 .filterLabel{
     width: 100%;

@@ -2,6 +2,40 @@ function randd(min, max) {
   return Math.floor(arguments.length > 1 ? (max - min + 1) * Math.random() + min : (min + 1) * Math.random());
 };
 
+Vue.component('modalWin', {
+	props: {
+		title: {
+			type: String,
+			default: ""
+		},
+		content: {
+			type: String,
+			default: ""
+		}
+	},
+	data: function(){
+		return {
+			
+		};
+	},
+	methods: {
+		close: function(){
+			this.$emit('close');
+		}
+	},
+	computed: {
+		
+	},
+
+	template: `<div class="mod_win_wrapper" style='background: rgba(0, 0, 0, 0.7);' @click="close" @scroll.stop>
+	<div class="mod_win">
+		<span class="bCloseInfoWin" @click="close">×</span>
+		<div class="mod_win_content" v-html="content">
+		</div>	
+	</div>
+</div>`
+});
+
 Vue.component('searchfield', {
 	props: {
 		id: {
@@ -386,7 +420,10 @@ Vue.component('card', {
 			aHiddenItems: [],
 			aLockedItems: [],
 			aSelectedItems: [],
-			aSelectedLockedItems: []
+			aSelectedLockedItems: [],
+			
+			bModalWinShow: false,
+			sModalWinCont: ""
     },
 
 		computed: {
@@ -564,6 +601,8 @@ Vue.component('card', {
 		mounted: function() {
 			this.hideInfo();
 			this.getHash();
+			
+			this.sModalWinCont = $("#info_text").html();
 		},
 		methods: {
 			onSourceChange: function(sKey){
@@ -751,6 +790,17 @@ Vue.component('card', {
 					this.sSearch = oHash.q[0];
 				}
 				
+			},
+			
+			showInfo: function(){
+				this.bModalWinShow = true;
+			},
+			closeMosWin: function(){
+				this.bModalWinShow = false;
+			},
+			print: function(){
+				window.print();
+				return false;
 			}
 		}
   });

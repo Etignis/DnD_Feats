@@ -28,8 +28,13 @@
 </head>
 <body>
 
-<div class='wrap' id='app' @keyup.ctrl.65="selectAll">
+<div class='wrap'  id='app' @keyup.ctrl.65="selectAll">
 	<div class='p_side'>
+		<div class="mediaWidth flexParent">
+			<a href="/" class="bt flexChild" title="На главную страницу"><i class="fa fa-home"></i></a>
+			<a href="#" class="bt flexChild" id="bInfo" title="Справка" @click="showInfo"><i class="fa fa-question-circle"></i></a>
+			<a href="#" class="bt flexChild" id="bPrint" title="Распечатать" @click="print"><i class="fa fa-print" aria-hidden="true"></i></a>
+		</div>
 		<div class='mediaWidth'>
 			<searchfield
 				id="NameInput"
@@ -155,7 +160,7 @@
 				Что есть
 			</h2>
 			<p>
-				Список предметов экипировки D&D5 на русском и английском языках.
+				Список черт (feats) D&D5 на русском и английском языках.
 			</p>
 			<p>
 				Черты можно фильтровать по:
@@ -213,15 +218,22 @@
 					</ul>
 			</p>
 			<p>
-				Если есть вопросы или предложения - <a style="color: #0288D1" href="https://tentaculus.ru/message?theme=dndequipment">пишите</a>.
+				Если есть вопросы или предложения - <a style="color: #0288D1" href="https://tentaculus.ru/message?theme=dndfeats">пишите</a>.
 			</p>
 			<p>
-				<a style="color: #0288D1"  href="https://github.com/Etignis/DnD_Equipment" target="_blanc">Страница проекта на GitHub.</a>
+				<a style="color: #0288D1"  href="https://github.com/Etignis/DnD_Feats" target="_blanc">Страница проекта на GitHub.</a>
 			</p>
 		</div>
-		<div class='row ItemContainer'>
-		</div>
+		
 	</div>
+	<transition name="fade">
+		<modal-win
+			v-show="bModalWinShow"
+			:content="sModalWinCont"
+			@close="closeMosWin"
+		>
+		</modal-win>
+	</transition>
 </div>
 
 	<script type='text/javascript' src="js/vue.js" defer></script>

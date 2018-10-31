@@ -592,7 +592,7 @@ table td:first-child {
   right: 0;
   left: 0;
   bottom: 0;
-  overflow-y: scroll;
+  overflow-y: hidden;
   z-index: 999;
 }
 .mod_win_wrapper .mod_win {
@@ -621,17 +621,21 @@ table td:first-child {
   -o-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  display: block;
+  padding: 0.3em;
+  display: flex;
   position: absolute;
   width: 95%;
   max-width: 50em;
   min-height: 15em;
+  max-height: 95%;
+  overflow-y: hidden;
   top: 1em;
   z-index: 9999;
   background: #eeeeee;
   color: #222;
   cursor: default;
   font-weight: normal;
+  position: relative;
 }
 .mod_win_wrapper .mod_win .randomProp {
   cursor: pointer;
@@ -701,10 +705,28 @@ table td:first-child {
 .mod_win_wrapper .mod_win a[href*="monsters"]:visited {
   color: #922e45;
 }
+.mod_win_wrapper .mod_win_content {
+  padding: .5em;
+  overflow-y: scroll;
+}
+.mod_win_wrapper .mod_win_content::-webkit-scrollbar {
+  width: 0.2em;
+  height: 0.2em;
+}
+.mod_win_wrapper .mod_win_content::-webkit-scrollbar-thumb {
+  background: #777;
+}
+.mod_win_wrapper .mod_win_content::-webkit-scrollbar-track {
+  background: #ddd;
+}
+.mod_win_wrapper .mod_win_content body {
+  scrollbar-face-color: #777;
+  scrollbar-track-color: #ddd;
+}
 .mod_win_wrapper .bCloseInfoWin {
   position: absolute;
   top: -0.2em;
-  right: 0;
+  right: .4em;
   padding: .1em .2em;
   font-size: 300%;
   cursor: pointer;
@@ -735,6 +757,14 @@ table td:first-child {
   background: rgba(0, 0, 0, 0.7);
   display: none;
   cursor: pointer;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 .filterLabel {
   width: 100%;
