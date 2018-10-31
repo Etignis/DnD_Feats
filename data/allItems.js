@@ -8,7 +8,7 @@ var oSources = {
 				"title": "Книга игрока"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"DMG": {
@@ -20,7 +20,7 @@ var oSources = {
 				"title": "Книга мастера"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": false
 	},
 	"ToA": {
@@ -32,7 +32,7 @@ var oSources = {
 				"title": "Гробница Аннигиляции"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": false
 	},
 	"XGTE": {
@@ -44,7 +44,7 @@ var oSources = {
 				"title": "Справочник Занатара Обо Всем"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"MToF": {
@@ -56,7 +56,7 @@ var oSources = {
 				"title": "Mordenkainen's Tome of Foes"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"WGtE": {
@@ -68,7 +68,7 @@ var oSources = {
 				"title": "Wayfinder's Guide to Eberron"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"PSK": {
@@ -80,7 +80,7 @@ var oSources = {
 				"title": "Plane Shift: Kaladesh"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"PSI": {
@@ -92,7 +92,7 @@ var oSources = {
 				"title": "Plane Shift: Ixalan"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"UA": {
@@ -104,7 +104,7 @@ var oSources = {
 				"title": "Unearthed Arcana"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	}
 }
@@ -119,7 +119,7 @@ var oTypes = {
 				"title": "Общие"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"Weapon": {
@@ -131,7 +131,7 @@ var oTypes = {
 				"title": "Оружие"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"Armor": {
@@ -143,7 +143,7 @@ var oTypes = {
 				"title": "Броня"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"Skill Proficiency": {
@@ -155,7 +155,7 @@ var oTypes = {
 				"title": "Умения"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"Tool Proficiency": {
@@ -167,7 +167,7 @@ var oTypes = {
 				"title": "Инструменты"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"Racial": {
@@ -179,7 +179,7 @@ var oTypes = {
 				"title": "Рассовые"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	},
 	"World-specific": {
@@ -191,7 +191,7 @@ var oTypes = {
 				"title": "Миро-зависимые"
 			}
 		},
-		"checked": true,
+		"checked": false,
 		"visible": true
 	}
 }

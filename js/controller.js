@@ -570,10 +570,10 @@ Vue.component('card', {
 				}
 			},
 			unlockCard: function(oCard){
-				if(this.aSelectedItems.length>0) {
-					this.aSelectedItems.forEach(function(sId){
+				if(this.aSelectedLockedItems.length>0) {
+					this.aSelectedLockedItems.forEach(function(sId){
 						let nInd = this.aLockedItems.indexOf(sId);
-						if(nInd>1) {
+						if(nInd>-1) {
 							this.aLockedItems.splice(nInd, 1);
 						}
 					}.bind(this));

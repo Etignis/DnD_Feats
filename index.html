@@ -84,9 +84,39 @@
 	</div>
 	<div class='p_cont'>
 	
-		<div id='lockedItemsArea'  v-show="aLockedItemsList.length>0"><span class='bUnlockAll' @click="unlockAll">Открепить все</span><span class='topHeader'></span><div class='content row'>
+		<div id='lockedItemsArea' v-show="aLockedItemsList.length>0">
+			<div class='flex_row noprint'>
+				<span class='topHeader'>Закрепленные черты ({{aLockedItemsList.length}})</span>
+				<span class='bUnlockAll' @click="unlockAll">Открепить все</span>
+			</div>
+			<div class='content row'>
+				<card
+					v-for="item in aLockedItemsList"
+					:key="item.name"
+					:id="item.id"
+					:name="item.name"
+					:tooltip="item.tooltip"
+					:text="item.text"
+					:src="item.src"
+					:source="item.source"
+					:type="item.type"
+					:color="item.color"
+					:pre="item.pre"
+					:selected="item.selected"
+					:locked="item.locked"
+					@unlock="unlockCard(item)"
+					@select="selectLockedCard(item)"
+				>
+				</card>
+			</div>
+			<div class='flex_row noprint'>
+				<span class='bottomHeader'>Каталог черт</span>
+			</div>
+		</div>
+	
+		<div class="row featContainer noprint" :data-itemcount="aItemsList.length">
 			<card
-				v-for="item in aLockedItemsList"
+				v-for="item in aItemsList"
 				:key="item.name"
 				:id="item.id"
 				:name="item.name"
@@ -96,33 +126,14 @@
 				:source="item.source"
 				:type="item.type"
 				:color="item.color"
-				:pre="item.pre"
 				:selected="item.selected"
-				:locked="item.locked"
-				@unlock="unlockCard(item)"
-				@select="selectLockedCard(item)"
+				:pre="item.pre"
+				@lock="lockCard(item)"
+				@hide="hideCard(item)"
+				@select="selectCard(item)"
 			>
 			</card>
-		</div><span class='bottomHeader'></span></div>
-	
-		<card
-			v-for="item in aItemsList"
-			:key="item.name"
-			:id="item.id"
-			:name="item.name"
-			:tooltip="item.tooltip"
-			:text="item.text"
-			:src="item.src"
-			:source="item.source"
-			:type="item.type"
-			:color="item.color"
-			:selected="item.selected"
-			:pre="item.pre"
-			@lock="lockCard(item)"
-			@hide="hideCard(item)"
-			@select="selectCard(item)"
-		>
-		</card>
+		</div>
 		
 		<div id='info_text'>
 			<h1>Черты D&amp;D5</h2>
