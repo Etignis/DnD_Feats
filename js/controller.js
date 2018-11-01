@@ -185,18 +185,20 @@ Vue.component('combobox', {
 		}
 	},
 	methods: {
-		toggle: function(){
-			this.open = !this.open;
+		toggle: function(oEvent, bStat){
+			this.open = (bStat!=undefined)? bStat : !this.open;
 			let el = $("#"+this.id).find(".combo_box_content");
 			if(this.open) {
-				el.slideDown();
-				this.$emit('opened', true);
+				el.slideDown(400, function(){
+					this.$emit('opened', true);
+				}.bind(this));				
 			} else {
-				this.$emit('opened', false);
-				el.slideUp();
+				el.slideUp(400, function(){
+					this.$emit('opened', false);
+				}.bind(this));
 			}
 		},
-		itemclick: function(oEvent){ 
+		itemclick: function(oEvent){
 			this.$emit('iclick', oEvent);
 		}
 	},
@@ -611,6 +613,9 @@ Vue.component('card', {
 			this.sModalWinCont = $("#info_text").html();
 			
 			this.loadConfigData();
+			
+			this.$refs.TypeCombobox.toggle(null, this.bTypesOpend);
+			this.$refs.SourceCombobox.toggle(null, this.bbSourcesOpend);
 		},
 		methods: {
 			onSourceChange: function(sKey){
@@ -643,9 +648,11 @@ Vue.component('card', {
 			
 			onTypesToggled: function(bStat){
 					this.setConfig("typesOpend", bStat);
+					//this.bTypesOpend = bStat;	
 			},
 			onSourcesToggled: function(bStat){
-					this.setConfig("sourcesOpend", bStat);
+					this.setConfig("sourcesOpend", bStat);	
+					//this.bSourcesOpend = bStat;
 			},
 			
 			hideInfo(){
@@ -847,16 +854,15 @@ Vue.component('card', {
 					this.aLockedItems = aTmpLocked;
 				}
 				
-				let bTypesOpend = this.getConfig("typesOpend");
-				if(bTypesOpend != undefined) {
-					
+				let bTmpTypesOpend = this.getConfig("typesOpend");
+				if(bTmpTypesOpend != undefined) {
+					this.bTypesOpend = bTmpTypesOpend
 				}
 				
-				let bSourcesOpend = this.getConfig("sourcesOpend");
-				if(bSourcesOpend != undefined) {
-					
-				}
-				
-				
+				let bTMPSourcesOpend = this.getConfig("sourcesOpend");
+				if(bTMPSourcesOpend != undefined) {		
+					this.bSourcesOpend = bTMPSourcesOpend;					
+				}	
+			}
 		}
   });

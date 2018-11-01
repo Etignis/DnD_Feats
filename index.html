@@ -48,28 +48,31 @@
 		<div class='mediaWidth'>
 			<combobox
 				id="TypeCombobox"
+				ref="TypeCombobox"
 				title="Типы"
 				:items="aTypeList"
 				:opened="bTypesOpend"
 				@iclick="onTypeChange($event)"
-				@opened="onTypesToggled($even)"
+				@opened="onTypesToggled($event)"
 			>
 			</combobox>
 		</div>
 		<div class='mediaWidth'>
 			<combobox
 				id="SourceCombobox"
+				ref="SourceCombobox"
 				title="Источники"
 				:items="aSrcList"
 				:opened="bSourcesOpend"
 				@iclick="onSourceChange($event)"
-				@opened="onSourcesToggled($even)"
+				@opened="onSourcesToggled($event)"
 			>
 		</combobox>
 		</div>
 		<div class='mediaWidth'>
 			<custom-select
 				id="SortSelect"
+				ref="SortSelect"
 				title="Сортировка"
 				:selected="sSortSelected"
 				:items="aSortList"
@@ -80,6 +83,7 @@
 		<div class='mediaWidth'>
 			<custom-select
 				id="LangSelect"
+				ref="LangSelect"
 				title="Язык"
 				:selected="sLangSelected"
 				:items="aLanguageList"
