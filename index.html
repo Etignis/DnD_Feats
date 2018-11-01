@@ -50,7 +50,9 @@
 				id="TypeCombobox"
 				title="Типы"
 				:items="aTypeList"
+				:opened="bTypesOpend"
 				@iclick="onTypeChange($event)"
+				@opened="onTypesToggled($even)"
 			>
 			</combobox>
 		</div>
@@ -59,7 +61,9 @@
 				id="SourceCombobox"
 				title="Источники"
 				:items="aSrcList"
+				:opened="bSourcesOpend"
 				@iclick="onSourceChange($event)"
+				@opened="onSourcesToggled($even)"
 			>
 		</combobox>
 		</div>

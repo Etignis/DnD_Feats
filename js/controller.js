@@ -169,7 +169,7 @@ Vue.component('combobox', {
 			type: Array,
 			default: []
 		},
-		bOpen: {
+		opened: {
 			type: Boolean,
 			default: false
 		}
@@ -181,7 +181,7 @@ Vue.component('combobox', {
 	},
 	computed: {
 		isOpen: function(){
-			return (this.open!=null)?this.open : this.bOpen || false;
+			return (this.open!=null)?this.open : this.opened || false;
 		}
 	},
 	methods: {
@@ -190,7 +190,9 @@ Vue.component('combobox', {
 			let el = $("#"+this.id).find(".combo_box_content");
 			if(this.open) {
 				el.slideDown();
+				this.$emit('opened', true);
 			} else {
+				this.$emit('opened', false);
 				el.slideUp();
 			}
 		},
@@ -422,6 +424,10 @@ Vue.component('card', {
 			aSelectedItems: [],
 			aSelectedLockedItems: [],
 			
+			oConfig: {},
+			bTypesOpend: false,			
+			bSourcesOpend: false,			
+			
 			bModalWinShow: false,
 			sModalWinCont: ""
     },
@@ -603,6 +609,8 @@ Vue.component('card', {
 			this.getHash();
 			
 			this.sModalWinCont = $("#info_text").html();
+			
+			this.loadConfigData();
 		},
 		methods: {
 			onSourceChange: function(sKey){
@@ -615,6 +623,8 @@ Vue.component('card', {
 			},
 			onLanguageChange: function(sKey){
 				this.sLang = sKey;
+				this.setConfig("lang", sKey);
+				
 				this.updateHash();
 			},
 			onSortChange: function(sKey){
@@ -629,6 +639,13 @@ Vue.component('card', {
 				this.sSearch = "";
 				this.sSearch = this.aItemsList[randd(0, this.aItemsList.length-1)].name;
 				this.updateHash();
+			},
+			
+			onTypesToggled: function(bStat){
+					this.setConfig("typesOpend", bStat);
+			},
+			onSourcesToggled: function(bStat){
+					this.setConfig("sourcesOpend", bStat);
 			},
 			
 			hideInfo(){
@@ -649,6 +666,7 @@ Vue.component('card', {
 						this.aLockedItems.push(id);
 					}
 				}
+				this.setConfig("locked", this.aLockedItems);
 			},
 			unlockCard: function(oCard){
 				if(this.aSelectedLockedItems.length>0) {
@@ -665,6 +683,7 @@ Vue.component('card', {
 						this.aLockedItems.splice(nInd, 1);
 					}
 				}
+				this.setConfig("locked", this.aLockedItems);
 			},
 			hideCard: function(oCard){
 				if(this.aSelectedItems.length>0) {
@@ -801,6 +820,43 @@ Vue.component('card', {
 			print: function(){
 				window.print();
 				return false;
-			}
+			},
+			
+			setConfig: function (prop, val) {
+				if(prop && val != undefined && this.oConfig) {
+					this.oConfig[prop] = val;
+					localStorage.setItem("feat_config", JSON.stringify(this.oConfig));
+				}
+			},
+			getConfig: function (prop) {
+				this.oConfig = JSON.parse(localStorage.getItem("feat_config")) || {};
+				if(prop!=undefined) {
+					return localStorage.getItem("feat_config")? this.oConfig[prop] : null;
+				}
+				return ""; 
+			},
+			
+			loadConfigData: function(){
+				let sTmpLang = this.getConfig("lang");
+				if(sTmpLang){
+					this.sLang = sTmpLang;					
+				}
+				
+				let aTmpLocked = this.getConfig("locked");
+				if(aTmpLocked) {
+					this.aLockedItems = aTmpLocked;
+				}
+				
+				let bTypesOpend = this.getConfig("typesOpend");
+				if(bTypesOpend != undefined) {
+					
+				}
+				
+				let bSourcesOpend = this.getConfig("sourcesOpend");
+				if(bSourcesOpend != undefined) {
+					
+				}
+				
+				
 		}
   });
