@@ -29,7 +29,7 @@
 <body>
 
 <div class='wrap'  id='app' @keyup.ctrl.65="selectAll">
-	<div class='p_side'>
+	<div class='p_side'  v-cloak>
 		<div class="mediaWidth flexParent">
 			<a href="/" class="bt flexChild" title="На главную страницу"><i class="fa fa-home"></i></a>
 			<a href="#" class="bt flexChild" id="bInfo" title="Справка" @click="showInfo"><i class="fa fa-question-circle"></i></a>
@@ -102,7 +102,7 @@
 	</div>
 	<div class='p_cont'>
 	
-		<div id='lockedItemsArea' v-show="aLockedItemsList.length>0">
+		<div id='lockedItemsArea' v-show="aLockedItemsList.length>0"  v-cloak>
 			<div class='flex_row noprint'>
 				<span class='topHeader'>Закрепленные черты ({{aLockedItemsList.length}})</span>
 				<span class='bUnlockAll' @click="unlockAll">Открепить все</span>
@@ -133,7 +133,7 @@
 		</div>
 	
 		<div class="row featContainer" :class="{noprint: aLockedItemsList.length>0}" :data-itemcount="aItemsList.length">
-			<span class='itemCounter noprint' v-show="aLockedItemsList.length<1">{{aItemsList.length}}</span>
+			<span class='itemCounter noprint' v-show="aLockedItemsList.length<1"  v-cloak>{{aItemsList.length}}</span>
 			<card
 				v-for="item in aItemsList"
 				:key="item.name"
