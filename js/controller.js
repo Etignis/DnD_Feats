@@ -428,7 +428,9 @@ Vue.component('card', {
 			
 			oConfig: {},
 			bTypesOpend: false,			
-			bSourcesOpend: false,			
+			bSourcesOpend: false,		
+			bCardsAreVisible: false,	
+			bAppIsReady: false,	
 			
 			bModalWinShow: false,
 			sModalWinCont: ""
@@ -607,15 +609,23 @@ Vue.component('card', {
 			
 		},
 		mounted: function() {
-			this.hideInfo();
-			this.getHash();
-			
+			this.loadConfigData();			
 			this.sModalWinCont = $("#info_text").html();
 			
-			this.loadConfigData();
+			let bInfoIsRead = this.getConfig("infoIsRead");
+			if(bInfoIsRead) {
+				this.hideInfo();
+				this.showCards();
+			}
+			
+			this.getHash();			
 			
 			this.$refs.TypeCombobox.toggle(null, this.bTypesOpend);
-			this.$refs.SourceCombobox.toggle(null, this.bbSourcesOpend);
+			this.$refs.SourceCombobox.toggle(null, this.bSourcesOpend);
+			
+			this.updateHash();
+			
+			this.bAppIsReady = true;
 		},
 		methods: {
 			onSourceChange: function(sKey){
@@ -635,6 +645,7 @@ Vue.component('card', {
 			onSortChange: function(sKey){
 				this.sSort = sKey;
 				this.updateHash();
+				this.setConfig("sort", sKey);
 			},
 			onSearchName: function(sValue){
 				this.sSearch = sValue.trim();
@@ -648,11 +659,9 @@ Vue.component('card', {
 			
 			onTypesToggled: function(bStat){
 					this.setConfig("typesOpend", bStat);
-					//this.bTypesOpend = bStat;	
 			},
 			onSourcesToggled: function(bStat){
-					this.setConfig("sourcesOpend", bStat);	
-					//this.bSourcesOpend = bStat;
+					this.setConfig("sourcesOpend", bStat);
 			},
 			
 			hideInfo(){
@@ -715,6 +724,7 @@ Vue.component('card', {
 			},
 			unlockAll: function(){
 				this.aLockedItems = [];
+				this.setConfig("locked", this.aLockedItems);
 			},
 			unhideAll: function(){
 				this.aHiddenItems = [];
@@ -829,6 +839,17 @@ Vue.component('card', {
 				return false;
 			},
 			
+			showCards: function(){
+				this.bCardsAreVisible = true;
+			},
+			
+			showAllItems: function(){
+				this.closeMosWin();
+				this.hideInfo();
+				this.showCards();
+				this.setConfig("infoIsRead", true);
+			},
+			
 			setConfig: function (prop, val) {
 				if(prop && val != undefined && this.oConfig) {
 					this.oConfig[prop] = val;
@@ -847,6 +868,11 @@ Vue.component('card', {
 				let sTmpLang = this.getConfig("lang");
 				if(sTmpLang){
 					this.sLang = sTmpLang;					
+				}
+				
+				let sTmpSort = this.getConfig("sort");
+				if(sTmpSort){
+					this.sSort = sTmpSort;					
 				}
 				
 				let aTmpLocked = this.getConfig("locked");
