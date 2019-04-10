@@ -900,7 +900,7 @@ Vue.component('card', {
 				oDB.allItems = this.aItems;
 				
 				var sData = JSON.stringify(oDB, null, 2);
-				var filename = "DnD5e_invokations_BD";
+				var filename = "DnD5e_feats_BD";
 				var blob = new Blob([sData], {type: "text/plain;charset=utf-8"});
 				saveAs(blob, filename+".dtn");
 			},
