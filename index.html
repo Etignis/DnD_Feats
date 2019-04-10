@@ -107,6 +107,17 @@
 			</custom-select>
 			</div>
 		</div>
+		<div class='mediaWidth'>
+			<button
+				@click="downloadDB"
+			>Скачать</button>
+		</div>
+		<div class='mediaWidth'>
+			<input type="file" style="display: none" ref="fileUploader" id="fileUploader" @change="fileSelected">
+			<button
+				@click="uploadDB">
+				Загрузить</button>
+		</div>
 	</div>
 	<div class='p_cont'>
 	
@@ -252,6 +263,7 @@
   <script type='text/javascript' src='data/allItems.js?v=0.2' defer></script>
   <!--script type='text/javascript' src='js/script.js?v=0.71' defer></script-->
   <script type='text/javascript' src='js/controller.js?v=0.1' defer></script>
+  <script type='text/javascript' src="js/FileSaver.min.js"></script>
 <!--   <script type='text/javascript' src='https://tentaculus.ru/items/js/update.js' defer></script> -->
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
