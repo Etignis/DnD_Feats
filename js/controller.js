@@ -510,7 +510,10 @@ Vue.component('card', {
 				return a;
 			},
 			
-			sSortSelected: function(){
+			sSortSelected: function(){				
+				if(!(this.sSort == "alpha")) {
+					this.sSort = "typeAlpha";
+				}
 				return this.aSort[this.sSort].text[this.sLang].title;
 			},
 			
@@ -560,6 +563,7 @@ Vue.component('card', {
 							return 1;						
 						return 0
 					} else {
+						this.sSort = "typeAlpha";
 						if (a.typeNum+a.name.toLowerCase().trim() < b.typeNum+b.name.toLowerCase().trim() )
 							return -1;
 						if (a.typeNum+a.name.toLowerCase().trim() > b.typeNum+b.name.toLowerCase().trim() )
